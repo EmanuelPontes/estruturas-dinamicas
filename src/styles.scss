@@ -1,0 +1,77 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '~@angular/material' as mat;
+@import '../node_modules/ngx-toastr/toastr';
+
+@import 'theme';
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+$tertiary: #3fb247;
+
+$custom-theme-colors:map-merge($theme-colors, (
+  "tertiary": $tertiary
+));
+
+$theme-colors: map-merge($theme-colors, $custom-theme-colors);
+$theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
+
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/maps"; 
+@import "~bootstrap/scss/grid";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ips-inventario-primary: mat.define-palette($ocean-blue);
+$ips-inventario-accent: mat.define-palette($light-gray, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ips-inventario-warn: mat.define-palette($brad-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ips-inventario-theme: mat.define-light-theme((
+  color: (
+    primary: $ips-inventario-primary,
+    accent: $ips-inventario-accent,
+    warn: $ips-inventario-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($ips-inventario-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+.mat-success {
+  background-color: green;
+  color: #fff;
+}
+
+.mat-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.mat-warning {
+  background-color: #ffc107;
+  color: #000;
+}

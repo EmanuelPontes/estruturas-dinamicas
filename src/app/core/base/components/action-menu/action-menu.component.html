@@ -1,0 +1,37 @@
+ <button mat-mini-fab
+    icon="fa fa-plus" 
+    [matTooltipPosition]="'below'"
+    matTooltip="Novo" 
+    color="primary"
+    (click)="novo()"
+    *ngIf="permissaoNovo">
+    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+</button>            
+  
+  <button mat-mini-fab
+  color="accent"
+    [matTooltipPosition]="'below'"
+    matTooltip="Editar" 
+    color="success"
+    (click)="existeItemSelecionado('editar')"
+    *ngIf="permissaoEditar">
+    <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+</button> 
+  
+  <button mat-mini-fab 
+  color="warning"
+    [matTooltipPosition]="'below'"
+    matTooltip="Consultar" 
+    (click)="existeItemSelecionado('consultar')"
+    *ngIf="permissaoConsultar">
+    <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+</button> 
+  
+  <button mat-mini-fab 
+    color="danger"
+    [matTooltipPosition]="'below'"
+    matTooltip="Excluir" 
+    (click)="existeItemSelecionado('excluir')"
+    *ngIf="permissaoExcluir">
+    <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+</button>

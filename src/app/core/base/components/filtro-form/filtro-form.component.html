@@ -1,0 +1,19 @@
+<form class="row" [formGroup]="form">
+
+    <ng-container *ngFor="let field of fields; let i = index">
+        <app-field class="col-xl-4" [field]="field" [form]="form"> 
+
+        </app-field>
+
+    </ng-container>
+    
+    
+    
+</form>
+<ng-container *ngIf="showActions">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button mat-raised-button color="secondary" (click)="clear()">{{clearButtonText}}</button>
+        <button mat-raised-button color="primary" (click)="save()">{{submitButtonText}}</button>
+    </div>
+   
+</ng-container>

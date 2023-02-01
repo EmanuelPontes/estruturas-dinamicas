@@ -1,0 +1,20 @@
+<app-action-menu 
+[selecionado]="itemSelecionado"
+[permissaoNovo]="true"
+[permissaoEditar]="true"
+[permissaoConsultar]="true"
+[permissaoExcluir]="true"
+[isBtNovoEmit]="true"
+(onNovoClick)="openDialog()"
+(onEditarClick)="editar()"
+>
+
+</app-action-menu>
+
+<app-filtro-form [fields]="fields$ | async" (onSubmit)="salvar($event)">
+
+</app-filtro-form>
+
+<app-apres-table [dadosOrigem]="dadosOrigem" (onSelected)="selecionado($event)">
+
+</app-apres-table>

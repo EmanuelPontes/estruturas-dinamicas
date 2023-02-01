@@ -1,0 +1,54 @@
+<div class="table-wrapper">
+
+    <table matSort (matSortChange)="sortData($event)" class="table">
+        <thead>
+            <tr [ngClass]="{'table-secondary': color === 'secondary', 'table-primary': color === 'primary'}">
+                <th class="text-center">
+                </th>
+                <th class="ms-4" [mat-sort-header]="'header' + idx"
+                    *ngFor="let header of tabelaPagina?.cabecalho; let idx = index">
+                    {{header}}
+                </th>
+                
+
+            </tr>
+
+        </thead>
+        <tbody>
+            <ng-container *ngIf="tabelaCarregada">
+                <ng-container
+                    *ngFor="let row of counter(pageSize > tabelaPagina?.linhas.length ? tabelaPagina?.linhas.length : pageSize); let i = index">
+                    <tr (dblclick)="$event ? onSelect(tabelaPagina?.linhas[i].obj) : null">
+                        <td>
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                color="primary"
+                                (change)="$event ? onSelect(tabelaPagina?.linhas[i].obj) : null"
+                                [checked]="selection.isSelected(tabelaPagina?.linhas[i].obj)"
+                                [aria-label]="checkboxLabel(tabelaPagina?.linhas[i].obj)">
+                            </mat-checkbox>
+                        </td>
+                        <td class="text-center" *ngFor="let col of tabelaPagina?.linhas[i]?.colunas">
+                            <span style="margin: 0 auto;">{{col.value}}</span>
+
+
+                            <ng-template #elem></ng-template>
+                        </td>
+                    </tr>
+                </ng-container>
+
+
+            </ng-container>
+    </table>
+    <ng-container *ngIf="tabelaLocal.linhas.length > minSizePage">
+        <div class="d-flex justify-content-end">
+            <mat-paginator [length]="tabelaLocal.linhas.length" (page)="onPageEvent($event)" [pageSize]="pageSize"
+                [pageSizeOptions]="pageSizeOptions" aria-label="Select page of GitHub search results">
+            </mat-paginator>
+        </div>
+
+    </ng-container>
+    <!-- <ng-container *ngFor="let item of selection.selected">
+        {{item.nome}}
+    </ng-container> -->
+
+</div>

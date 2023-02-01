@@ -1,0 +1,9 @@
+<mat-dialog-content>
+    <app-filtro-form [fields]="data" (onSubmit)="atualizar($event)" [showActions]="false" [monChange]="true">
+
+    </app-filtro-form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{exitButtonText}}</button>
+    <button mat-button (click)="salvar()" cdkFocusInitial>{{enterButtonText}}</button>
+</mat-dialog-actions>
