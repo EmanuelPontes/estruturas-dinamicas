@@ -1,9 +1,10 @@
+<h1 mat-dialog-title>{{title}}</h1>
 <mat-dialog-content>
-    <app-filtro-form [fields]="data" (onSubmit)="atualizar($event)" [showActions]="false" [monChange]="true">
+    <app-filtro-form [formFields]="filtroForm" [modalSearchConfig]="data.searchConfig" (onUpdateChange)="atualizar($event)" [showActions]="false" [monChange]="true">
 
     </app-filtro-form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>{{exitButtonText}}</button>
-    <button mat-button (click)="salvar()" cdkFocusInitial>{{enterButtonText}}</button>
+    <button mat-raised-button color="accent" mat-dialog-close *ngIf="!exitButtonText.hide">{{exitButtonText.label}}</button>
+    <button mat-raised-button color="primary" (click)="salvar()" cdkFocusInitial *ngIf="!enterButtonText.hide">{{enterButtonText.label}}</button>
 </mat-dialog-actions>

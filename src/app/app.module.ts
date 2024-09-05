@@ -7,8 +7,10 @@ import { AppComponent } from './app.component';
 import { BaseModule } from './core/base/base.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faSun as fasSun, faStar as fasStar, faMoon as fasMoon, faSync as fasSync, fas } from '@fortawesome/free-solid-svg-icons';
 import { ToastrModule } from 'ngx-toastr';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -17,14 +19,14 @@ import { ToastrModule } from 'ngx-toastr';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
+    HttpClientModule,
     BaseModule,
     BrowserAnimationsModule,
     NgbModule,
-    FontAwesomeModule,
     ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}

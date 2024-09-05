@@ -1,17 +1,11 @@
 <app-action-menu 
-[selecionado]="itemSelecionado"
-[permissaoNovo]="true"
-[permissaoEditar]="true"
-[permissaoConsultar]="true"
-[permissaoExcluir]="true"
-[isBtNovoEmit]="true"
-(onNovoClick)="openDialog()"
-(onEditarClick)="editar()"
+[customBtnSet]="actionButtonList"
+(onCustomClick)="actionRequestEventManager($event)"
 >
 
 </app-action-menu>
 
-<app-filtro-form [fields]="fields$ | async" (onSubmit)="salvar($event)">
+<app-filtro-form [formFields]="fields$ | async" (onSubmit)="salvar($event)">
 
 </app-filtro-form>
 

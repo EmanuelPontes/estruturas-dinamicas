@@ -1,0 +1,62 @@
+.no-underline {
+    ::ng-deep .mat-form-field-underline {
+        display: none;
+    }
+}
+
+.with-underline {
+    ::ng-deep .mat-form-field-underline {
+        display: block;
+    }
+}
+
+:host  ::ng-deep .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+:host  ::ng-deep .mat-sort-header-content {
+    margin-left: 12px;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    .mat-table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        display: table;
+        border-collapse: collapse;
+        margin: 0px;
+    }
+    .mat-row,
+    .mat-header-row {
+        min-width: 1920px;
+        display: table-row;
+    }
+    .mat-table-sticky {
+        background: #c7ffe4;
+        opacity: 1;
+    }
+    .mat-cell,
+    .mat-footer-cell,
+    .mat-header-cell {
+        word-wrap: initial;
+        display: table-cell;
+        line-break: unset;
+        width: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        vertical-align: middle;
+        background-color: var(--bs-table-bg);
+        color: var(--bs-body-color);
+        min-width: 120px;
+        padding: 0;
+    }
+
+    
+  }
+  

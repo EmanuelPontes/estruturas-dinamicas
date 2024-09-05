@@ -1,19 +1,132 @@
 
-<div   [formGroup]="form">
-    <label [attr.for]="field.key">{{field.label}}</label>
-  
-    <div [ngSwitch]="field.controlType">
-  
-      <input *ngSwitchDefault class="form-control" [formControlName]="field.key" 
-              [id]="field.key" [type]="field.type">
+<ng-container  [formGroup]="form">
+    
+    
+    <ng-container [ngSwitch]="field.controlType">
+      <mat-form-field class="col-xl-12 col-md-12" *ngSwitchDefault appearance="outline">
+        <mat-label [attr.for]="field.key">{{formattedLabel}} </mat-label>
+        <input matInput  [formControlName]="field.key" 
+              [id]="field.key" [type]="field.type" [readonly]="field.readonly" [mask]="getMask">
+      </mat-form-field>
+      
 
         
+      <mat-form-field class="col-xl-12 col-md-12" *ngSwitchCase="'dropdown'" appearance="outline">
+        <mat-label [attr.for]="field.key">{{formattedLabel}} </mat-label>
+        <mat-select [id]="field.key"  [formControlName]="field.key" [disabled]="field.readonly" [multiple]="field.multi">
+          <mat-option>
+            <ngx-mat-select-search placeholderLabel="Procurar..." noEntriesFoundLabel="nenhuma opção encontrada" [formControl]="websiteFilterCtrl"></ngx-mat-select-search>
+          </mat-option>
+          <!-- <mat-option *ngFor="let opt of field.options" [value]="opt.value">{{opt.key}}</mat-option> -->
+          <mat-option *ngFor="let opt of filteredOptions | async" [value]="opt.value">{{opt.key}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+
+      <ng-container *ngSwitchCase="'search'">
+          
+          <mat-form-field  class="col-xl-12 col-md-12" appearance="outline">
+            <mat-label [attr.for]="field.key">{{formattedLabel}} </mat-label>
+            <input [id]="field.key" [type]="field.type" class="form-control" [readonly]="field.readonly" [formControlName]="field.key" style="display: none;">
+            <input matInput class="form-control" type="text" name="search-value" id="search-value" [value]="searchValue" readonly="true">
+            
+            
+            <mat-chip-list #chipList aria-label="Video keywords" multiple [formControlName]="field.key">
+              <mat-chip
+                  *ngFor="let keyword of keywords"
+                  [selected]="keyword"
+                  [value]="keyword"
+                  (removed)="removeKeyword(keyword)">
+                {{keyword}}
+              </mat-chip>
+            </mat-chip-list>
+            <button mat-icon-button matSuffix color="primary" class="btn mb-2 pb-2"type="button" id="button-addon2" (click)="onSearchClick(field.key)" [disabled]="field.readonly">
+              <mat-icon>
+                search
+              </mat-icon>
+            </button>
+          </mat-form-field>
+          
+      </ng-container>
+      
+      <ng-container *ngSwitchCase="'table'">
+        <ng-container class="col-xl-12 col-md-12" [formArrayName]="field.key">
+          <table #table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="margin: 0; width: 100%;">
+    
+            <!-- Position Column -->
+            <ng-container [matColumnDef]="column" *ngFor="let column of displayedColumns">
+              <th mat-header-cell *matHeaderCellDef class="text-center"> {{column == 'action' ? 'Ações' : labelTable(column) }}  </th>
+              <td class="text-center" mat-cell *matCellDef="let element; let i = index" [formGroup]="element">
+                <ng-container *ngIf="column !== 'action'">
+                    <!-- <span [hidden]="VOForm.get('VORows').value[i].isEditable"> -->
+   
+                      <ng-container *ngIf="isObject(column, i); else primitive">
+                        
+                        <mat-form-field class="mx-sm-1 no-underline" style="width: 120px;"
+                          appearance="fill">
+                          <input matInput type="text" [value]="getLabelFromObj(column, i)" [readonly]="true">
+                        </mat-form-field>
+                      </ng-container>
+                      <ng-template  #primitive>
+                          <mat-form-field class="mx-sm-1" style="width: 70px;"
+                          [ngClass]="{'no-underline': form.get(this.field.key).value[i].isEditable, 'with-underline': !form.get(this.field.key).value[i].isEditable}"
+                          appearance="fill">
+                          <input matInput type="text" [formControlName]="column" [readonly]="form.get(field.key).value[i].isEditable">
+                        </mat-form-field>
+                        
+                      </ng-template >
+                    
+                  <!-- </span> -->
+                </ng-container>
+                <ng-container *ngIf="column == 'action' && !field.readonly">
+                  <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            matTooltip="Salvar" (click)="SaveVO(form,i)"
+                                            *ngIf="!form.get(field.key).value[i].isEditable" color="primary">
+                                            <mat-icon>check_circle</mat-icon>
+                                        </button>
+        
+                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                            matTooltip="Cancelar" color="warn"
+                                            (click)="CancelSVO(form,i)"
+                                            *ngIf="!form.get(field.key).value[i].isEditable">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+        
+                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            *ngIf="form.get(field.key).value[i].isEditable"
+                                            matTooltip="Editar" color="primary" (click)="EditSVO(form,i)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+        
+                    <!-- <button mat-icon-button class="material-icons app-toolbar-menu delete-button"
+                                            *ngIf="form.get(field.key).value[i].isEditable"
+                                            matTooltip="Delete" color="warn">
+                                            <mat-icon>delete</mat-icon>
+                                        </button> -->
+                </ng-container>
+              </td>
+              
+
+              
+
+            </ng-container>
+
+            
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4"> Nenhum registro encontrado </td>
+              
+            </tr>
+          </table>
+        </ng-container>
+      </ng-container>
+    </ng-container>
   
-      <select class="form-select" [id]="field.key" *ngSwitchCase="'dropdown'" [formControlName]="field.key">
-        <option *ngFor="let opt of field.options" [value]="opt.key">{{opt.value}}</option>
-      </select>
-  
-    </div>
-  
-    <div class="errorMessage" *ngIf="!isValid">{{field.label}} is required</div>
-</div>
+    <div class="text-danger" *ngIf="!isValid">{{formattedLabel}} é obrigatório!</div>
+    <div class="text-danger" *ngIf="isValid && form.hasError('notSame') && isSenha">As senhas não são iquais</div>
+    
+</ng-container>

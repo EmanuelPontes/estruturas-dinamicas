@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+
+    <form [formGroup]="form">
+        <label for="file">Arquivo</label>
+        <input class="form-control" (change)="onFileChange($event)" type="file" name="file" id="file">
+    </form>
+    
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="accent" mat-dialog-close *ngIf="!exitButtonText.hide">{{exitButtonText.label}}</button>
+    <button mat-raised-button color="primary" (click)="salvar()" cdkFocusInitial *ngIf="!enterButtonText.hide">{{enterButtonText.label}}</button>
+</mat-dialog-actions>

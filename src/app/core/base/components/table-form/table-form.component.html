@@ -1,0 +1,131 @@
+<div class="row">
+  <div class="col-xl-12 col-md-12">
+    <mat-form-field>
+      <mat-label>Filtro</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Bolo" #input>
+    </mat-form-field>
+  </div>
+</div>
+
+<form [formGroup]="tabelaLocal.form" class="table-responsive mt-3" autocomplete="off">
+
+
+  <ng-container class="table-responsive" formArrayName="VORows">
+    <table matSort (matSortChange)="sortData($event)" #table mat-table [dataSource]="dataSource">
+
+
+      <!-- Position Column -->
+      <ng-container [matColumnDef]="column" *ngFor="let column of tabelaLocal.displayedColumns; let col = index"
+        [sticky]="isSticky(col)" [stickyEnd]="isStickyEnd(col)">
+
+        <ng-container *ngIf="column == 'select'; else notselect">
+          <th class="text-center" mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? toggleAllRows() : null" color="primary"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+
+          </th>
+        </ng-container>
+        <ng-template #notselect>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef class="text-center"> {{column == 'action' ? 'Ações' :
+            labelTable(col) }}</th>
+        </ng-template>
+
+
+
+        <td class="text-start" [ngClass]="{'text-center': column == 'select'}" mat-cell
+          *matCellDef="let element; let i = index" [formGroup]="element">
+          <ng-container *ngIf="column !== 'action' && column !== 'select'">
+            <!-- <span [hidden]="VOForm.get('VORows').value[i].isEditable"> -->
+
+            <ng-container *ngIf="isObject(column, i);">
+
+              <mat-form-field class="text-center no-underline"
+                [ngStyle]="{'width': column == 'descricao' ? stickyColumns ? '120px' : '100%' : '120px'}" appearance="fill">
+                <input matInput type="text" [value]="getLabelFromObj(column, i)" [readonly]="true">
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngIf="isReadOnly(column, i); else primitive">
+
+              <mat-form-field class="text-center no-underline"
+                [ngStyle]="{'width': column == 'descricao' ? stickyColumns ? '120px' : '100%' : '120px'}" appearance="fill">
+                <input matInput type="text" [formControlName]="column" [readonly]="true">
+              </mat-form-field>
+            </ng-container>
+            <ng-template #primitive>
+              <mat-form-field class="text-center"
+                [ngClass]="{'no-underline': isEditable(i), 'with-underline': !isEditable(i)}" appearance="fill">
+                <input matInput type="text" [formControlName]="column" [readonly]="isEditable(i)">
+              </mat-form-field>
+
+            </ng-template>
+
+            <!-- </span> -->
+          </ng-container>
+          <ng-container *ngIf="column == 'action'">
+            <div class="bg-white text-center">
+              <button mat-icon-button class="material-icons app-toolbar-menu save-button" matTooltip="Salvar"
+                (click)="SaveVO(i)" *ngIf="!isEditable(i)" color="primary">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+
+              <button mat-icon-button class="material-icons app-toolbar-menu cancel-button" matTooltip="Cancelar"
+                color="warn" (click)="CancelSVO(i)" *ngIf="!isEditable(i)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+
+              <button mat-icon-button class="material-icons app-toolbar-menu save-button" *ngIf="isEditable(i)"
+                matTooltip="Editar" color="primary" (click)="EditSVO(i)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+
+
+            <!-- <button mat-icon-button class="material-icons app-toolbar-menu delete-button"
+                                          *ngIf="form.get(field.key).value[i].isEditable"
+                                          matTooltip="Delete" color="warn">
+                                          <mat-icon>delete</mat-icon>
+                                      </button> -->
+          </ng-container>
+          <ng-container *ngIf="column == 'select'">
+            <div class="bg-white">
+              <mat-checkbox (click)="$event.stopPropagation()" color="primary"
+                (change)="$event ? onSelect(element.value) : null" [checked]="selection.isSelected(element.value)"
+                [aria-label]="checkboxLabel(element.value)">
+              </mat-checkbox>
+            </div>
+
+
+          </ng-container>
+
+        </td>
+
+
+
+
+      </ng-container>
+
+
+
+      <tr mat-header-row *matHeaderRowDef="tabelaLocal.displayedColumns; sticky: stickyColumns"
+        [ngClass]="{'table-secondary': color === 'secondary', 'table-primary': color === 'primary'}"></tr>
+      <tr mat-row *matRowDef="let row; columns: tabelaLocal.displayedColumns;"></tr>
+      
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row text-center" *matNoDataRow>
+        <td class="mat-cell " colspan="12"> Nenhum registro encontrador </td>
+      </tr>
+    </table>
+
+  </ng-container>
+
+</form>
+<ng-container *ngIf="totalElementos > minSizePage">
+  <div class="d-flex justify-content-end">
+    <mat-paginator [length]="totalElementos" (page)="onPageEvent($event)" [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions" aria-label="Select page of GitHub search results">
+    </mat-paginator>
+  </div>
+
+</ng-container>

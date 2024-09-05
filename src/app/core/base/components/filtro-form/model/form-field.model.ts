@@ -1,12 +1,14 @@
 export class FormField<T> {
     
     value: T | undefined;
+    multi: boolean = false;
     key: string;
     label: string;
     required: boolean;
     order: number;
     controlType: string;
     type: string;
+    readonly: boolean;
     options: {key: string; value:string}[];
 
 
@@ -18,6 +20,8 @@ export class FormField<T> {
         order?: number;
         controlType?: string;
         type?: string;
+        multi?: boolean;
+        readonly?: boolean;
         options?: {key: string, value: string}[];
       } = {}) {
       this.value = options.value;
@@ -27,7 +31,9 @@ export class FormField<T> {
       this.order = options.order === undefined ? 1 : options.order;
       this.controlType = options.controlType || '';
       this.type = options.type || 'text';
+      this.readonly = options.readonly || false;
       this.options = options.options || [];
+      this.multi = options.multi || false;
     }
 
 

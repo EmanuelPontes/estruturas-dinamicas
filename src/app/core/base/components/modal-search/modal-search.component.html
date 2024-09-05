@@ -1,0 +1,13 @@
+<mat-dialog-content>
+    <app-filtro-form submitButtonText="Pesquisar" [isCleanBtnHidden]="isCleanBtnHidden" [autoSubmit]="true" [modalSearchConfig]="data.children" [formFields]="formFilters" (onSubmit)="pesquisar($event)">
+
+    </app-filtro-form>
+
+    <app-apres-table [dadosOrigem]="dadosOrigem" [selectMemory]="true" [multi]="multi" [totalElementos]="totalRegistros" (onSelected)="selecionar($event)" (onPageChange)="aoMudarPagina($event)">
+
+    </app-apres-table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="accent" mat-dialog-close *ngIf="!exitButtonText.hide">{{exitButtonText.label}}</button>
+    <button mat-raised-button color="primary" (click)="salvar()" cdkFocusInitial *ngIf="!enterButtonText.hide">{{enterButtonText.label}}</button>
+</mat-dialog-actions>

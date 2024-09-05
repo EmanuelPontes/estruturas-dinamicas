@@ -1,0 +1,64 @@
+<div class="row">
+	<div class="col-xs-12 col-md-5">
+		<div class="form-control">
+			<label class="form-label" for="attb-relat" style="font-weight: 700;">{{titleRight}}</label>
+			<!-- <input  placeholder="Buscar atributo(s)" class="form-field" type="text" name="filter" id="filterSource" (keyup)="onKeyUp($event)" > -->
+			<div *ngIf="filtroBusca" class="form-control form-control--icon" style="width: 100%; max-width:400px">
+				<input class="form-field" type="text" name="buscar-attrb" id="buscar-attrb" placeholder="Buscar atributo(s)" (keyup)="onKeyUp($event)"><i class="icon-nav-busca icon" aria-hidden="true"></i>
+			</div>
+			<select class="form-field" style="width: 400px; height: auto;"
+				[size]="sourceList?.length" multiple [(ngModel)]="attrbSourceList"
+				id="attb-relat">
+				<option [ngValue]="item" *ngFor="let item of sourceList" (dblclick)="dbClickSource()" (keyup.enter)="onKeyUp($event)"><span
+						*ngIf="objKey.length > 0"> {{item[objKey]}} </span> <span
+						*ngIf="objKey.length === 0"> {{item}} </span>
+
+				</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-2">
+		<div class="row">
+			<button class="btn btn-link" style="margin: 0 auto;"
+				(click)="onAdd()"
+				[disabled]="isAddDisabled || this.sourceList?.length === 0">
+				<fa-icon [icon]="['fas', 'angle-right']"  size="3x"></fa-icon>
+				
+			</button>
+		</div>
+		<div class="row">
+			<button class="btn btn-link" style="margin: 0 auto;"
+				(click)="onAddAll()"
+				[disabled]="isAddDisabled || this.sourceList?.length === 0">
+				<fa-icon [icon]="['fas', 'angle-double-right']"  size="3x"></fa-icon>
+			</button>
+		</div>
+		<div class="row">
+			<button class="btn btn-link" style="margin: 0 auto;"
+				(click)="onRemove()"
+				[disabled]="isRemoveDisabled || this.destinationList?.length === 0">
+				<fa-icon [icon]="['fas', 'angle-left']"  size="3x"></fa-icon>
+			</button>
+		</div>
+		<div class="row">
+			<button class="btn btn-link" style="margin: 0 auto;"
+				(click)="onRemoveAll()"
+				[disabled]="isRemoveDisabled || this.destinationList?.length === 0">
+				<fa-icon [icon]="['fas', 'angle-double-left']"  size="3x"></fa-icon>
+			</button>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-5">
+		<div class="form-control">
+			<label class="form-label" for="attb-select" style="font-weight: 700;">{{titleLeft}}</label>
+			<select class="form-field" style="width: 400px; height: auto;"
+				[size]="destinationList?.length" [(ngModel)]="attrbDestinationList"
+				multiple name="campo-selecionar" id="attb-select">
+				<option [ngValue]="item" *ngFor="let item of destinationList" (dblclick)="dbClickDestination()">
+					<span *ngIf="objKey.length > 0"> {{item[objKey]}} </span> <span
+						*ngIf="objKey.length === 0"> {{item}} </span>
+				</option>
+			</select>
+		</div>
+	</div>
+</div>

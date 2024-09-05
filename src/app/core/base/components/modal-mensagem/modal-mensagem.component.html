@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<mat-dialog-content>
+    <p>
+        {{data.msg}}
+    </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="accent" mat-dialog-close *ngIf="!exitButtonText.hide">{{exitButtonText.label}}</button>
+</mat-dialog-actions>

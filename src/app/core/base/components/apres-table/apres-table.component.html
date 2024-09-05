@@ -1,54 +1,103 @@
-<div class="table-wrapper">
+<ng-container *ngIf="filtroEnabled">
+    <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <mat-form-field>
+            <mat-label>Filtro</mat-label>
+            <input matInput (keyup)="filtro($event)" placeholder="Ex. Bolo" #input>
+          </mat-form-field>
+        </div> 
+      </div>
+</ng-container>
 
-    <table matSort (matSortChange)="sortData($event)" class="table">
-        <thead>
-            <tr [ngClass]="{'table-secondary': color === 'secondary', 'table-primary': color === 'primary'}">
-                <th class="text-center">
-                </th>
-                <th class="ms-4" [mat-sort-header]="'header' + idx"
-                    *ngFor="let header of tabelaPagina?.cabecalho; let idx = index">
-                    {{header}}
-                </th>
-                
 
-            </tr>
+<div class="row">
+    <div class="table-wrapper mt-5">
 
-        </thead>
-        <tbody>
-            <ng-container *ngIf="tabelaCarregada">
-                <ng-container
-                    *ngFor="let row of counter(pageSize > tabelaPagina?.linhas.length ? tabelaPagina?.linhas.length : pageSize); let i = index">
-                    <tr (dblclick)="$event ? onSelect(tabelaPagina?.linhas[i].obj) : null">
-                        <td>
-                            <mat-checkbox (click)="$event.stopPropagation()"
-                                color="primary"
-                                (change)="$event ? onSelect(tabelaPagina?.linhas[i].obj) : null"
-                                [checked]="selection.isSelected(tabelaPagina?.linhas[i].obj)"
-                                [aria-label]="checkboxLabel(tabelaPagina?.linhas[i].obj)">
+        <table matSort (matSortChange)="sortData($event)" class="table">
+            <thead>
+                <tr [ngClass]="{'table-secondary': color === 'secondary', 'table-primary': color === 'primary'}">
+                    <th class="text-center">
+
+                        <ng-container *ngIf="tabelaCarregada && multi">
+                            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                        color="primary"            
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                        [aria-label]="checkboxLabel()">
                             </mat-checkbox>
-                        </td>
-                        <td class="text-center" *ngFor="let col of tabelaPagina?.linhas[i]?.colunas">
-                            <span style="margin: 0 auto;">{{col.value}}</span>
+                        </ng-container>
+                        
+                        
+                    </th>
 
+                    <ng-container *ngFor="let header of tabelaPagina?.cabecalho; let idx = index">
+                        <th class="ms-4" [mat-sort-header]="'header' + idx">
+                            {{header}}
+                        </th>
+                        
+                        
+                    </ng-container>
+                    
+                    
+                    
+    
+                </tr>
+    
+            </thead>
+            <tbody>
+                <ng-container *ngIf="tabelaCarregada">
+                    <ng-container
+                        *ngFor="let row of counter(pageSize > tabelaPagina?.linhas.length ? tabelaPagina?.linhas.length : pageSize); let i = index">
+                        
+                        
+                        <tr (dblclick)="$event ? selection.toggle(tabelaPagina?.linhas[i].obj) : null">
+                            <td class="text-center">
 
-                            <ng-template #elem></ng-template>
+                                <ng-container *ngIf="habilitarSelecao">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                        color="primary"
+                                        (change)="$event ? selection.toggle(tabelaPagina?.linhas[i].obj) : null"
+                                        [checked]="selection.isSelected(tabelaPagina?.linhas[i].obj)"
+                                        [aria-label]="checkboxLabel(tabelaPagina?.linhas[i].obj)">
+                                    </mat-checkbox>
+                                </ng-container>
+                                
+                                
+                            </td>
+                            <ng-container *ngFor="let col of tabelaPagina?.linhas[i]?.colunas">
+                                <td class="text-center" >
+                                    <span style="margin: 0 auto;">{{col.formatedValue}}</span>
+        
+        
+                                    <ng-template #elem></ng-template>
+                                </td>
+                                
+                            </ng-container>
+                            
+                        </tr>
+                    </ng-container>
+    
+    
+                </ng-container>
+                <ng-container *ngIf="!tabelaCarregada">
+                    <tr>
+                        <td >
+                            Nenhum registro encontrado
                         </td>
                     </tr>
                 </ng-container>
-
-
-            </ng-container>
-    </table>
-    <ng-container *ngIf="tabelaLocal.linhas.length > minSizePage">
-        <div class="d-flex justify-content-end">
-            <mat-paginator [length]="tabelaLocal.linhas.length" (page)="onPageEvent($event)" [pageSize]="pageSize"
-                [pageSizeOptions]="pageSizeOptions" aria-label="Select page of GitHub search results">
-            </mat-paginator>
-        </div>
-
-    </ng-container>
-    <!-- <ng-container *ngFor="let item of selection.selected">
-        {{item.nome}}
-    </ng-container> -->
-
+        </table>
+        <ng-container *ngIf="totalElementos > minSizePage">
+            <div class="d-flex justify-content-end">
+                <mat-paginator [length]="totalElementos" (page)="onPageEvent($event)" [pageSize]="pageSize"
+                    [pageSizeOptions]="pageSizeOptions" aria-label="Select page of GitHub search results">
+                </mat-paginator>
+            </div>
+    
+        </ng-container>
+        <!-- <ng-container *ngFor="let item of selection.selected">
+            {{item.nome}}
+        </ng-container> -->
+    
+    </div>
 </div>
